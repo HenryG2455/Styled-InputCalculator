@@ -4,7 +4,7 @@ import './App.css';
 
 const Wrapper = styled.section`
   background: #20beec;
-  margin: 30px 700px;
+  margin: 30px 720px;
   border-radius: 7px;
 `;
 
@@ -29,14 +29,14 @@ const H1 = styled.h1`
 `;
 
 const Input = styled.input`
-  width: 70%;
+  width: 90%;
   padding: 8px 10px;
   margin: 4px;
   border-radius: 7px;
 `;
 
 const Select = styled.select`
-  width: 59%;
+  width: 79%;
   padding: 8px 10px;
   margin: 4px 3px;
   border-radius: 7px;
@@ -44,7 +44,7 @@ const Select = styled.select`
 
 const Div1 = styled.div`
   text-align: center;
-  padding: 20px 5px;
+  padding: 35px 5px;
 `;
 
 class App extends Component {
@@ -52,11 +52,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-      first: '',
-      second: ''
+      first: 0,
+      second: 0,
+      oper: '',
+      result: 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.calculate = this.calculate.bind(this);
   }
 
   async handleSubmit(e) {
@@ -73,27 +76,34 @@ class App extends Component {
     });
   }
 
-  calculate() {
-    const data = {
-      first: this.state.first,
-      second: this.state.second
-    };
-    const oper = document.getElementsByName('operator').value;
-    if (oper === '+') {
-      document.getElementById('result').value = data.first + data.second;
+  async calculate(props) {
+    let num1 = this.state.first;
+    let num2 = this.state.second;
+    let sign = this.state.oper;
+
+    if (sign === '+') {
+      this.setState({
+        result: parseInt(num1) + parseInt(num2)
+      });
       console.log('Added');
     }
-    if (oper === '-') {
-      document.getElementById('result').value = data.first - data.second;
-      console.log('Added');
+    if (sign === '-') {
+      this.setState({
+        result: num1 - num2
+      });
+      console.log('Subtracted');
     }
-    if (oper === 'x') {
-      document.getElementById('result').value = data.first * data.second;
-      console.log('Added');
+    if (sign === 'x') {
+      this.setState({
+        result: num1 * num2
+      });
+      console.log('Multiplied');
     }
-    if (oper === '/') {
-      document.getElementById('result').value = data.first / data.second;
-      console.log('Added');
+    if (sign === '/') {
+      this.setState({
+        result: num1 / num2
+      });
+      console.log('Devided');
     }
   }
 
@@ -108,7 +118,6 @@ class App extends Component {
                 type="number"
                 name="first"
                 placeholder="Enter the first number"
-                value={this.state.first}
                 onChange={this.handleChange}
               />
             </div>
@@ -117,12 +126,11 @@ class App extends Component {
                 type="number"
                 name="second"
                 placeholder="Enter the second number"
-                value={this.state.second}
                 onChange={this.handleChange}
               />
             </div>
             <div className="input-group">
-              <Select name="operator" onChange={this.handleChange}>
+              <Select name="oper" onChange={this.handleChange}>
                 <option value="" hidden>
                   Operator
                 </option>
@@ -136,7 +144,12 @@ class App extends Component {
               </Button>
             </div>
             <div>
-              <Input type="text" id="result" placeholder="0" />
+              <Input
+                type="text"
+                id="result"
+                placeholder="0"
+                value={this.state.result}
+              />
             </div>
           </form>
         </Div1>
